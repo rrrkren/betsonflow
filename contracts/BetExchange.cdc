@@ -204,14 +204,14 @@ access(all) contract BetExchange {
     access(self) let FTProvider: Capability<&{FungibleToken.Provider}>
 
   // The bet stakes are held in this escrow
-    access(self) let EscrowAddress: Address
+    pub let EscrowAddress: Address
 
   // When the offer is accepted, the layer's bet slip is deposited here
-    access(self) let LayerBetSlipCollection: Capability<&{PublicBetSlipCollection}>
+    pub let LayerBetSlipCollection: Capability<&{PublicBetSlipCollection}>
 
     pub var WinMultiplier: UFix64
 
-    access(self) let WinOutcome: SportOracle.FixtureOutcome
+    pub let WinOutcome: SportOracle.FixtureOutcome
 
     pub let fixtureID: UInt64
     pub let oracleAddress: Address
@@ -290,12 +290,12 @@ access(all) contract BetExchange {
   pub resource interface PublicBetOfferCollection {
     pub fun getBetOffer(id: UInt64): &AnyResource{PublicBetOffer}
     pub fun getBetOfferIDs(): [UInt64]
-    pub fun getBetOfferByFixtureID(fixtureID: UInt64, oracleAddress: Address): &AnyResource{PublicBetOffer}?
+    pub fun getBetOfferByFixtureID(fixtureID: UInt64, oracleAddress: Address): [&AnyResource{PublicBetOffer}]
   }
 
   pub resource BetOfferCollection: PublicBetOfferCollection {
       pub let betOffers: @{UInt64: BetOffer}
-      pub let oracleFixtureOffers: {Address: {UInt64: UInt64}}
+      pub let oracleFixtureOffers: {Address: {UInt64: {SportOracle.FixtureOutcome: UInt64}}}
 
     // update Offer
     // add Offer
@@ -303,10 +303,16 @@ access(all) contract BetExchange {
         if self.oracleFixtureOffers[betOffer.oracleAddress] == nil {
             self.oracleFixtureOffers[betOffer.oracleAddress] = {}
         }
-        let fixtureOffersMap = self.oracleFixtureOffers[betOffer.oracleAddress]!
+        let fixtureOutcomeOffersMap = self.oracleFixtureOffers[betOffer.oracleAddress]!
 
-        fixtureOffersMap[betOffer.fixtureID] = betOffer.uuid
-        self.oracleFixtureOffers[betOffer.oracleAddress] = fixtureOffersMap
+        if fixtureOutcomeOffersMap[betOffer.fixtureID] == nil {
+            fixtureOutcomeOffersMap[betOffer.fixtureID] = {}
+        }
+        let outcomeOffersMap = fixtureOutcomeOffersMap[betOffer.fixtureID]!
+
+        outcomeOffersMap[betOffer.WinOutcome] = betOffer.uuid
+        fixtureOutcomeOffersMap[betOffer.fixtureID] = outcomeOffersMap
+        self.oracleFixtureOffers[betOffer.oracleAddress] = fixtureOutcomeOffersMap
         self.betOffers[betOffer.uuid] <-! betOffer
     }
     pub fun getBetOffer(id: UInt64): &AnyResource{PublicBetOffer} {
@@ -316,14 +322,18 @@ access(all) contract BetExchange {
     pub fun getBetOfferIDs(): [UInt64] {
         return self.betOffers.keys
     }
-    pub fun getBetOfferByFixtureID(fixtureID: UInt64, oracleAddress: Address): &AnyResource{PublicBetOffer}? {
+    pub fun getBetOfferByFixtureID(fixtureID: UInt64, oracleAddress: Address): [&AnyResource{PublicBetOffer}] {
         if self.oracleFixtureOffers[oracleAddress] == nil {
-            return nil
+            return []
         }
         if self.oracleFixtureOffers[oracleAddress]![fixtureID] == nil {
-            return nil
+            return []
         }
-        return self.getBetOffer(id: self.oracleFixtureOffers[oracleAddress]![fixtureID]!)
+        var res: [&AnyResource{PublicBetOffer}] = []
+        for outcome in self.oracleFixtureOffers[oracleAddress]![fixtureID]!.keys {
+            res.append(self.getBetOffer(id: self.oracleFixtureOffers[oracleAddress]![fixtureID]![outcome]!))
+        }
+        return res
     }
     pub fun withdrawBetOffer(id: UInt64): @BetOffer {
         return <- self.betOffers.remove(key: id)!
@@ -344,4 +354,3 @@ access(all) contract BetExchange {
   }
 
 }
-

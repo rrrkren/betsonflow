@@ -1,4 +1,4 @@
-import BetExchange from 0xbb5968808fa5535e
+import BetExchange from 0xdc8ea2ecd2a3fa4f
 
 transaction {
 
