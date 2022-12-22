@@ -1,6 +1,6 @@
-import FungibleToken from 0x01cf0e2f2f715450
-import SportOracle from 0xf3fcd2c1a78f5eee
-import FTEscrow from 0x179b6b1cb6755e31
+import FungibleToken from 0x9a0766d93b6608b7
+import SportOracle from 0x42880022fd60a371
+import FTEscrow from 0x56de6f6221fee904
 
 access(all) contract BetExchange {
 
