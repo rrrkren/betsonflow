@@ -33,6 +33,10 @@
 			"address": "045a1763c93006ca",
 			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
 		},
+		"layer-testnet": {
+			"address": "349cbc429ab9128f",
+			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
+		},
 		"sportoracle-emulator": {
 			"address": "f3fcd2c1a78f5eee",
 			"key": "92ae07e5b02dc911f19c1b6ec68cabf74a0e2e7ecefadda1c3e5d222d2b7b3a2"
