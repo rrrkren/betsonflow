@@ -19,6 +19,6 @@ transaction {
         let winning <- betSlip.SettleBet()!
 
         flowTokenReceiver.deposit(from: <-winning)
-        destroy betSlip
+        betSlipCollection.depositBetSlip(betSlip: <-betSlip)
     }
 }
