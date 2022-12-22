@@ -13,7 +13,7 @@ transaction {
 
         let betOfferPublicCollection = layer.getCapability<&AnyResource{BetExchange.PublicBetOfferCollection}>(/public/BetOfferCollection).borrow()!
 
-        let betOffer = betOfferPublicCollection.getBetOffer(id: 123788277)
+        let betOffer = betOfferPublicCollection.getBetOffer(id: 123788328)
 
     var vaultRef = acct.getCapability
             <&AnyResource{FungibleToken.Provider}>
