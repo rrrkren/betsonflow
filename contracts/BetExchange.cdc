@@ -22,8 +22,9 @@ access(all) contract BetExchange {
     pub let oracleAddress: Address
     pub let inverseOutcome: Bool
     pub let won: Bool?
+    pub let wager: UFix64
 
-    init(betSlipID: UInt64, WinMultiplier: UFix64, WinOutcome: SportOracle.FixtureOutcome, fixtureID: UInt64, oracleAddress: Address, inverseOutcome: Bool, won: Bool?) {
+    init(betSlipID: UInt64, WinMultiplier: UFix64, WinOutcome: SportOracle.FixtureOutcome, fixtureID: UInt64, oracleAddress: Address, inverseOutcome: Bool, won: Bool?, wager: UFix64) {
       self.betSlipID = betSlipID
       self.WinMultiplier = WinMultiplier
       self.WinOutcome = WinOutcome
@@ -31,6 +32,7 @@ access(all) contract BetExchange {
       self.oracleAddress = oracleAddress
       self.inverseOutcome = inverseOutcome
       self.won = won
+      self.wager = wager
     }
   }
 
@@ -42,12 +44,13 @@ access(all) contract BetExchange {
     pub let oracleAddress: Address
     pub let inverseOutcome: Bool
     pub var won: Bool?
+    pub let wager: UFix64
 
     pub var str_extension: {String:String}
     pub var int_extension: {String:UInt64}
 
     pub fun GetBetSlipInfo(): BetSlipInfo {
-        return BetSlipInfo(betSlipID: self.uuid, WinMultiplier: self.WinMultiplier, WinOutcome: self.WinOutcome, fixtureID: self.fixtureID, oracleAddress: self.oracleAddress, inverseOutcome: self.inverseOutcome, won: self.won)
+        return BetSlipInfo(betSlipID: self.uuid, WinMultiplier: self.WinMultiplier, WinOutcome: self.WinOutcome, fixtureID: self.fixtureID, oracleAddress: self.oracleAddress, inverseOutcome: self.inverseOutcome, won: self.won, wager: self.wager)
     }
 
     pub fun HasWon(): Bool {
@@ -90,7 +93,7 @@ access(all) contract BetExchange {
         return nil
     }
 
-    init(escrowAccessToken: @FTEscrow.EscrowAccessToken, winMultiplier: UFix64, winOutcome: SportOracle.FixtureOutcome, fixtureID: UInt64, oracleAddress: Address, inverseOutcome: Bool) {
+    init(escrowAccessToken: @FTEscrow.EscrowAccessToken, winMultiplier: UFix64, winOutcome: SportOracle.FixtureOutcome, fixtureID: UInt64, oracleAddress: Address, inverseOutcome: Bool, wager: UFix64) {
         pre {
             winMultiplier > 0.0: "Win multiplier must be greater than 0"
         }
@@ -102,6 +105,7 @@ access(all) contract BetExchange {
         self.oracleAddress = oracleAddress
         self.inverseOutcome = inverseOutcome
         self.won = nil
+        self.wager = wager
         self.int_extension = {}
         self.str_extension = {}
     }
@@ -263,10 +267,10 @@ access(all) contract BetExchange {
         let escrowAgreement <- FTEscrow.createEscrow(vault: <-stake)
         // create betslips
         let bettorAccessToken <- escrowAgreement.createAccessToken(escrowAddress: self.EscrowAddress)
-        let bettorSlip <- create BetSlip(escrowAccessToken: <-bettorAccessToken, winMultiplier: self.WinMultiplier, winOutcome: self.WinOutcome, fixtureID: self.fixtureID, oracleAddress: self.oracleAddress, inverseOutcome: false)
+        let bettorSlip <- create BetSlip(escrowAccessToken: <-bettorAccessToken, winMultiplier: self.WinMultiplier, winOutcome: self.WinOutcome, fixtureID: self.fixtureID, oracleAddress: self.oracleAddress, inverseOutcome: false, wager: stakeBalance)
         let layerAccessToken <- escrowAgreement.createAccessToken(escrowAddress: self.EscrowAddress)
         let escrowCollection = layerAccessToken.GetEscrowCollection()
-        let layerSlip <- create BetSlip(escrowAccessToken: <-layerAccessToken, winMultiplier: self.WinMultiplier, winOutcome: self.WinOutcome, fixtureID: self.fixtureID, oracleAddress: self.oracleAddress, inverseOutcome: true)
+        let layerSlip <- create BetSlip(escrowAccessToken: <-layerAccessToken, winMultiplier: self.WinMultiplier, winOutcome: self.WinOutcome, fixtureID: self.fixtureID, oracleAddress: self.oracleAddress, inverseOutcome: true, wager: stakeBalance)
 
 
         escrowCollection.depositEscrowAgreement(escrowAgreement: <-escrowAgreement)

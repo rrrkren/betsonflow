@@ -10,11 +10,11 @@
 			"key": "85f1116c3d093cd675e148081ff99f44f3a5cc60177d7615ff2268f66ce06915"
 		},
 		"betexchange-testnet-old": {
-			"address": "bb5968808fa5535e",
-			"key": "40a4ce0344224476f0829854bbe6bdec50fd8f43a077af89d58f9349dfc259ea"
+			"address": "dc8ea2ecd2a3fa4f",
+			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
 		},
 		"betexchange-testnet": {
-			"address": "dc8ea2ecd2a3fa4f",
+			"address": "2525efb20a173a39",
 			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
 		},
 		"bettor-emulator": {
@@ -38,14 +38,18 @@
 			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
 		},
 		"layer-testnet-old": {
-			"address": "349cbc429ab9128f",
-			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
-		},
-		"layer-testnet": {
 			"address": "c8a2e850a44c8063",
 			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
 		},
+		"layer-testnet": {
+			"address": "c142566f1bed3ae6",
+			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
+		},
 		"bettor-testnet": {
+			"address": "33718a8193133058",
+			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
+		},
+		"bettor-testnet-old": {
 			"address": "342e1f6b0676a66e",
 			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
 		},

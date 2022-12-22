@@ -1,7 +1,7 @@
 import FungibleToken from 0x9a0766d93b6608b7
 import SportOracle from 0x42880022fd60a371
 import FTEscrow from 0x56de6f6221fee904
-import BetExchange from 0xdc8ea2ecd2a3fa4f
+import BetExchange from 0x2525efb20a173a39
 import FlowToken from 0x7e60df042a9c0868
 
 transaction {
@@ -9,7 +9,7 @@ transaction {
     prepare(acct: AuthAccount) {
 
 
-        let layer = getAccount(0xc8a2e850a44c8063)
+        let layer = getAccount(0xc142566f1bed3ae6)
 
         let betOfferPublicCollection = layer.getCapability<&AnyResource{BetExchange.PublicBetOfferCollection}>(/public/BetOfferCollection).borrow()!
 

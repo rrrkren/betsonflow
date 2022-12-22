@@ -19,7 +19,7 @@ pub fun main(): [FixtureWithOdds] {
 
   let fixtureCollectionRef = oracle.getCapability(/public/SportOracleFixtureCollection).borrow<&AnyResource{SportOracle.PublicFixtureCollection}>() ?? panic("could not borrow collection")
 
-  let layer = getAccount(0xc8a2e850a44c8063)
+  let layer = getAccount(0xc142566f1bed3ae6)
 
   let offerCollectionRef = layer.getCapability(/public/BetOfferCollection).borrow<&BetExchange.BetOfferCollection{BetExchange.PublicBetOfferCollection}>() ?? panic("could not borrow collection")
 

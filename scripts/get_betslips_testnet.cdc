@@ -17,7 +17,7 @@ pub fun main(): [BetSlipWithFixture] {
 
   let fixtureCollectionRef = oracle.getCapability(/public/SportOracleFixtureCollection).borrow<&AnyResource{SportOracle.PublicFixtureCollection}>() ?? panic("could not borrow collection")
 
-  let bettor = getAccount(0x342e1f6b0676a66e)
+  let bettor = getAccount(0x33718a8193133058)
 
   let betslipCollectionRef = bettor.getCapability(/public/BetSlipCollection).borrow<&BetExchange.BetSlipCollection{BetExchange.PublicBetSlipCollection}>() ?? panic("could not borrow collection")
 
