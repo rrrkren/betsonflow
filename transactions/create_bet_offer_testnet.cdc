@@ -23,14 +23,14 @@ transaction {
     let escrowAddress :Address = 0x56de6f6221fee904
     let oracleAddress :Address = 0x42880022fd60a371
     let maxExposure: UFix64 = 5000.0
-    let fixtureID: UInt64 = 1
+    let fixtureID: UInt64 = 2
 
-    var winMultiplier = 1.2
+    var winMultiplier = 1.4
     var winOutcome = SportOracle.FixtureOutcome.HOME_WIN
     let betOffer <- BetExchange.createBetOffer(FTProvider: vaultRef, EscrowAddress: escrowAddress, LayerBetSlipCollection: betSlipCollectionRef, WinMultiplier: winMultiplier, WinOutcome: winOutcome, fixtureID: fixtureID, oracleAddress: oracleAddress, maxExposure: maxExposure)
     betOfferCollectionRef.addBetOffer(betOffer: <-betOffer)
 
-    winMultiplier = 2.5
+    winMultiplier = 2.2
     winOutcome = SportOracle.FixtureOutcome.AWAY_WIN
 
     let secondOffer <- BetExchange.createBetOffer(FTProvider: vaultRef, EscrowAddress: escrowAddress, LayerBetSlipCollection: betSlipCollectionRef, WinMultiplier: winMultiplier, WinOutcome: winOutcome, fixtureID: fixtureID, oracleAddress: oracleAddress, maxExposure: maxExposure)

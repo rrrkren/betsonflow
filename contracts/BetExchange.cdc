@@ -193,7 +193,7 @@ access(all) contract BetExchange {
   }
 
   pub resource interface PublicBetOffer {
-    pub fun acceptOffer(stake: @FungibleToken.Vault, outcome: SportOracle.FixtureOutcome): @BetSlip
+    pub fun acceptOffer(stake: @FungibleToken.Vault): @BetSlip
     pub fun getBetOfferInfo(): BetOfferInfoV2
   }
 
@@ -229,11 +229,7 @@ access(all) contract BetExchange {
         self.WinMultiplier = newMultiplier
     }
 
-    pub fun acceptOffer(stake: @FungibleToken.Vault, outcome: SportOracle.FixtureOutcome): @BetSlip {
-        pre {
-            outcome != SportOracle.FixtureOutcome.CANCELLED: "Outcome must be decided"
-            outcome != SportOracle.FixtureOutcome.EXT: "EXT NOT SUPPORTED"
-        }
+    pub fun acceptOffer(stake: @FungibleToken.Vault): @BetSlip {
 
        let oracle = getAccount(self.oracleAddress)
        let fixtureCollectionRef = oracle.getCapability(/public/SportOracleFixtureCollection).borrow<&AnyResource{SportOracle.PublicFixtureCollection}>() ?? panic("could not borrow collection")
