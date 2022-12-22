@@ -151,11 +151,50 @@ access(all) contract BetExchange {
     pub fun borrowBetSlip(id: UInt64): &AnyResource{PublicBetSlip}
   }
 
+  pub struct BetOfferInfo {
+    pub let EscrowAddress: Address
+    pub let WinMultiplier: UFix64
+    pub let WinOutcome: SportOracle.FixtureOutcome
+    pub let fixtureID: UInt64
+    pub let oracleAddress: Address
+    pub let maxLayerExposure: UFix64
 
-  // betoffer allows betslip to be created
+    init(EscrowAddress: Address, WinMultiplier: UFix64, WinOutcome: SportOracle.FixtureOutcome, fixtureID: UInt64, oracleAddress: Address, maxLayerExposure: UFix64) {
+      self.EscrowAddress = EscrowAddress
+      self.WinMultiplier = WinMultiplier
+      self.WinOutcome = WinOutcome
+      self.fixtureID = fixtureID
+      self.oracleAddress = oracleAddress
+      self.maxLayerExposure = maxLayerExposure
+    }
+
+  }
+
+
+  pub struct BetOfferInfoV2 {
+    pub let betOfferID: UInt64
+    pub let EscrowAddress: Address
+    pub let WinMultiplier: UFix64
+    pub let WinOutcome: SportOracle.FixtureOutcome
+    pub let fixtureID: UInt64
+    pub let oracleAddress: Address
+    pub let maxLayerExposure: UFix64
+
+    init(betOfferID: UInt64, EscrowAddress: Address, WinMultiplier: UFix64, WinOutcome: SportOracle.FixtureOutcome, fixtureID: UInt64, oracleAddress: Address, maxLayerExposure: UFix64) {
+      self.betOfferID = betOfferID
+      self.EscrowAddress = EscrowAddress
+      self.WinMultiplier = WinMultiplier
+      self.WinOutcome = WinOutcome
+      self.fixtureID = fixtureID
+      self.oracleAddress = oracleAddress
+      self.maxLayerExposure = maxLayerExposure
+    }
+
+  }
 
   pub resource interface PublicBetOffer {
     pub fun acceptOffer(stake: @FungibleToken.Vault, outcome: SportOracle.FixtureOutcome): @BetSlip
+    pub fun getBetOfferInfo(): BetOfferInfoV2
   }
 
   pub resource BetOffer: PublicBetOffer {
@@ -178,6 +217,10 @@ access(all) contract BetExchange {
     pub let oracleAddress: Address
 
     pub var maxExposure: UFix64
+
+    pub fun getBetOfferInfo(): BetOfferInfoV2 {
+        return BetOfferInfoV2(betOfferID: self.uuid, EscrowAddress: self.EscrowAddress, WinMultiplier: self.WinMultiplier, WinOutcome: self.WinOutcome, fixtureID: self.fixtureID, oracleAddress: self.oracleAddress, maxLayerExposure: self.maxExposure)
+    }
 
     pub fun updateWinMultiplier(newMultiplier: UFix64) {
         pre {
@@ -247,7 +290,7 @@ access(all) contract BetExchange {
   pub resource interface PublicBetOfferCollection {
     pub fun getBetOffer(id: UInt64): &AnyResource{PublicBetOffer}
     pub fun getBetOfferIDs(): [UInt64]
-    pub fun getBetOfferByFixtureID(fixtureID: UInt64, oracleAddress: Address): &AnyResource{PublicBetOffer}
+    pub fun getBetOfferByFixtureID(fixtureID: UInt64, oracleAddress: Address): &AnyResource{PublicBetOffer}?
   }
 
   pub resource BetOfferCollection: PublicBetOfferCollection {
@@ -257,6 +300,13 @@ access(all) contract BetExchange {
     // update Offer
     // add Offer
     pub fun addBetOffer(betOffer: @BetOffer) {
+        if self.oracleFixtureOffers[betOffer.oracleAddress] == nil {
+            self.oracleFixtureOffers[betOffer.oracleAddress] = {}
+        }
+        let fixtureOffersMap = self.oracleFixtureOffers[betOffer.oracleAddress]!
+
+        fixtureOffersMap[betOffer.fixtureID] = betOffer.uuid
+        self.oracleFixtureOffers[betOffer.oracleAddress] = fixtureOffersMap
         self.betOffers[betOffer.uuid] <-! betOffer
     }
     pub fun getBetOffer(id: UInt64): &AnyResource{PublicBetOffer} {
@@ -266,7 +316,13 @@ access(all) contract BetExchange {
     pub fun getBetOfferIDs(): [UInt64] {
         return self.betOffers.keys
     }
-    pub fun getBetOfferByFixtureID(fixtureID: UInt64, oracleAddress: Address): &AnyResource{PublicBetOffer} {
+    pub fun getBetOfferByFixtureID(fixtureID: UInt64, oracleAddress: Address): &AnyResource{PublicBetOffer}? {
+        if self.oracleFixtureOffers[oracleAddress] == nil {
+            return nil
+        }
+        if self.oracleFixtureOffers[oracleAddress]![fixtureID] == nil {
+            return nil
+        }
         return self.getBetOffer(id: self.oracleFixtureOffers[oracleAddress]![fixtureID]!)
     }
     pub fun withdrawBetOffer(id: UInt64): @BetOffer {
@@ -288,4 +344,4 @@ access(all) contract BetExchange {
   }
 
 }
- 
+
