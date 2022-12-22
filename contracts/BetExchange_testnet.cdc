@@ -5,6 +5,8 @@ import FTEscrow from 0x56de6f6221fee904
 access(all) contract BetExchange {
 
    pub event BetRedeemed(betSlipID: UInt64, wonAmount: UFix64);
+   pub event BetOfferCreated(betOfferID: UInt64);
+   pub event BetAccepted(betOfferID: UInt64, betSlipID: UInt64);
 
 
    pub resource interface PublicBetSlip {
@@ -270,6 +272,8 @@ access(all) contract BetExchange {
         escrowCollection.depositEscrowAgreement(escrowAgreement: <-escrowAgreement)
         self.LayerBetSlipCollection.borrow()!.depositBetSlip(betSlip: <- layerSlip)
 
+        emit BetAccepted(betOfferID: self.uuid, betSlipID: bettorSlip.uuid)
+
         return <- bettorSlip
     }
 
@@ -286,6 +290,8 @@ access(all) contract BetExchange {
         self.fixtureID = fixtureID
         self.oracleAddress = oracleAddress
         self.maxExposure = maxExposure
+
+        emit BetOfferCreated(betOfferID: self.uuid)
     }
   }
 
