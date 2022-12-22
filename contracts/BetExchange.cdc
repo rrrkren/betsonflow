@@ -235,6 +235,15 @@ access(all) contract BetExchange {
             outcome != SportOracle.FixtureOutcome.EXT: "EXT NOT SUPPORTED"
         }
 
+       let oracle = getAccount(self.oracleAddress)
+       let fixtureCollectionRef = oracle.getCapability(/public/SportOracleFixtureCollection).borrow<&AnyResource{SportOracle.PublicFixtureCollection}>() ?? panic("could not borrow collection")
+       let fixture = fixtureCollectionRef.GetFixture(id: self.fixtureID) ?? panic ("fixture does not exist")
+
+       if fixture.outcome != nil {
+           panic("fixture outcome already set")
+       }
+
+
         let stakeBalance = stake.balance
 
         // check if layer has sufficient balance to back the bet
