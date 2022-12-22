@@ -9,6 +9,7 @@ access(all) contract BetExchange {
 
    pub resource interface PublicBetSlip {
     pub fun GetBetSlipInfo(): BetSlipInfo
+    pub fun HasWon(): Bool
    }
 
   pub struct BetSlipInfo {

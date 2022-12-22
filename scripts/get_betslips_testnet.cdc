@@ -4,9 +4,11 @@ import BetExchange from 0xdc8ea2ecd2a3fa4f
 pub struct BetSlipWithFixture {
     pub let fixture: SportOracle.Fixture
     pub let betSlip: BetExchange.BetSlipInfo
-    init(fixture: SportOracle.Fixture, betSlip: BetExchange.BetSlipInfo) {
+    pub let won: Bool?
+    init(fixture: SportOracle.Fixture, betSlip: BetExchange.BetSlipInfo, won: Bool?) {
         self.fixture = fixture
         self.betSlip = betSlip
+        self.won = won
     }
 }
 
@@ -22,10 +24,18 @@ pub fun main(): [BetSlipWithFixture] {
   let res: [BetSlipWithFixture] = []
 
   for id in betslipCollectionRef.getBetSlipIDs() {
-    let betslip = betslipCollectionRef.borrowBetSlip(id: id).GetBetSlipInfo()
+    let betslip = betslipCollectionRef.borrowBetSlip(id: id)
+    let betslipInfo = betslip.GetBetSlipInfo()
+    var won: Bool? = nil
+    let fixture = fixtureCollectionRef.GetFixture(id: betslipInfo.fixtureID)!
+
+    if fixture.outcome != nil {
+      won = betslip.HasWon()
+    }
     let slipWithFixture = BetSlipWithFixture(
-      fixture: fixtureCollectionRef.GetFixture(id: betslip.fixtureID)!,
-      betSlip: betslip
+      fixture: fixtureCollectionRef.GetFixture(id: betslipInfo.fixtureID)!,
+      betSlip: betslipInfo,
+      won: won
     )
     res.append(slipWithFixture)
   }
