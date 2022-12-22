@@ -1,0 +1,41 @@
+{
+	"networks": {
+		"emulator": "127.0.0.1:3569",
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"betexchange-emulator": {
+			"address": "e03daebed8ca0615",
+			"key": "85f1116c3d093cd675e148081ff99f44f3a5cc60177d7615ff2268f66ce06915"
+		},
+		"bettor-emulator": {
+			"address": "120e725050340cab",
+			"key": "387c33ff2b6b48270f8cbc06bd7b55fb9516b77fb279c4ca248345bc220fde3f"
+		},
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": "8c6fdfc247253a0a13bc2aeee26d593f2184c2dd2a7a7d3a712ff52fbeaf4973"
+		},
+		"ftescrow-emulator": {
+			"address": "179b6b1cb6755e31",
+			"key": "d3f7375a1cdc2c9f74f1b2317963d57ac2564b3b668e1358cc72a742cee04878"
+		},
+		"layer-emulator": {
+			"address": "045a1763c93006ca",
+			"key": "c191beaddce4abf5da45240326acad0c8279f56bf1068c6f3aedeb343721965c"
+		},
+		"sportoracle-emulator": {
+			"address": "f3fcd2c1a78f5eee",
+			"key": "92ae07e5b02dc911f19c1b6ec68cabf74a0e2e7ecefadda1c3e5d222d2b7b3a2"
+		},
+		"sportoracle-testnet": {
+			"address": "42880022fd60a371",
+			"key": "40a4ce0344224476f0829854bbe6bdec50fd8f43a077af89d58f9349dfc259ea"
+		},
+		"token-emulator": {
+			"address": "01cf0e2f2f715450",
+			"key": "e5c99ec51fb14b562c2522b0da11cb35003e2aa61f4a2813a24408d29982c548"
+		}
+	}
+}

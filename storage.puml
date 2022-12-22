@@ -1,0 +1,44 @@
+@startuml
+title BetsOnFlow
+
+':Layer:
+':Bettor:
+':Oracle:
+
+
+json Fixture {
+  "home_team":"String",
+  "away_team":"String",
+  "start_time_utc": "UInt64",
+  "outcome": ["HOME_WIN", "AWAY_WIN", "CANCELLED", "DRAW"]
+}
+
+rectangle 0x1SportOracle {
+    (FixtureCollection) as (FC) <<private>>
+    [PublicFixtureCollection] as [PFC] <<public>>
+    
+    (PFC) ..> (FC)
+}
+
+rectangle 0x2Layer {
+    (BetOfferCollection) as (BOC) <<private>>
+    [PublicBetOfferCollection] as [PBOC] <<public>>
+    
+    (PBOC) ..> (BOC)
+}
+
+rectangle 0x3Bettor {
+    (BetSlipCollection) as (BSC) <<private>>
+    [PublicBetSlipCollection] as [PBSC] <<public>>
+    
+    (PBSC) ..> (BSC)
+}
+
+rectangle 0x4Escrow {
+    (BetEscrowCollection) as (BEC) <<private>>
+    [PublicBetEscrowCollection] as [PBEC] <<public>>
+    PBEC ..> BEC
+}
+
+@enduml
+ 
